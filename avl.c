@@ -288,18 +288,18 @@ static void  genDotAVL(T_avl root, FILE *fp) {
 	// => on ne peut pas faire deux appels à toString dans le même printf()
 
     fprintf(fp, "\t%s",toString(root->val)); 
-    fprintf(fp, " [label = \"{<c> %s | { <g> | <d>}}\"];\n",toString(root->val));
+    fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> | <d>}}\"];\n",toString(root->val), root->bal);
     if (root->r == NULL && root->l == NULL) {
         fprintf(fp, "\t%s", toString(root->val)); 
-		fprintf(fp, " [label = \"{<c> %s | { <g> NULL | <d> NULL}}\"];\n", toString(root->val));
+		fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> NULL | <d> NULL}}\"];\n", toString(root->val), root->bal);
 	}
     else if (root->r == NULL) {
         fprintf(fp, "\t%s", toString(root->val));
-		fprintf(fp, " [label = \"{<c> %s | { <g> | <d> NULL}}\"];\n", toString(root->val));
+		fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> | <d> NULL}}\"];\n", toString(root->val), root->bal);
 	}
 	else if ( root->l == NULL) {
         fprintf(fp, "\t%s",toString(root->val));
-		fprintf(fp, " [label = \"{<c> %s | { <g> NULL | <d> }}\"];\n", toString(root->val));
+		fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> NULL | <d> }}\"];\n", toString(root->val), root->bal);
 	}
 	
     if (root->l) {
