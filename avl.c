@@ -287,30 +287,30 @@ static void  genDotAVL(T_avl root, FILE *fp) {
 	// => elles renvoient toujours la même adresse 
 	// => on ne peut pas faire deux appels à toString dans le même printf()
 
-    fprintf(fp, "\t%s",toString(root->val)); 
-    fprintf(fp, " [label = \"{<c> %s | { <g> | <d>}}\"];\n",toString(root->val));
+    fprintf(fp, "\t\"%s\"",toString(root->val)); 
+    fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> | <d>}}\"];\n",toString(root->val), root->bal);
     if (root->r == NULL && root->l == NULL) {
-        fprintf(fp, "\t%s", toString(root->val)); 
-		fprintf(fp, " [label = \"{<c> %s | { <g> NULL | <d> NULL}}\"];\n", toString(root->val));
+        fprintf(fp, "\t\"%s\"", toString(root->val)); 
+		fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> NULL | <d> NULL}}\"];\n", toString(root->val), root->bal);
 	}
     else if (root->r == NULL) {
-        fprintf(fp, "\t%s", toString(root->val));
-		fprintf(fp, " [label = \"{<c> %s | { <g> | <d> NULL}}\"];\n", toString(root->val));
+        fprintf(fp, "\t\"%s\"", toString(root->val));
+		fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> | <d> NULL}}\"];\n", toString(root->val), root->bal);
 	}
 	else if ( root->l == NULL) {
-        fprintf(fp, "\t%s",toString(root->val));
-		fprintf(fp, " [label = \"{<c> %s | { <g> NULL | <d> }}\"];\n", toString(root->val));
+        fprintf(fp, "\t\"%s\"",toString(root->val));
+		fprintf(fp, " [label = \"{{<c> %s | <b> %d} | { <g> NULL | <d> }}\"];\n", toString(root->val), root->bal);
 	}
 	
     if (root->l) {
-        fprintf(fp, "\t%s",toString(root->val));
-		fprintf(fp, ":g -> %s;\n", toString(root->l->val));
+        fprintf(fp, "\t\"%s\"",toString(root->val));
+		fprintf(fp, ":g -> \"%s\";\n", toString(root->l->val));
         genDotAVL(root->l, fp);
     }
 
     if (root->r) {
-        fprintf(fp, "\t%s",toString(root->val));
-		fprintf(fp,":d -> %s;\n", toString(root->r->val));
+        fprintf(fp, "\t\"%s\"",toString(root->val));
+		fprintf(fp,":d -> \"%s\";\n", toString(root->r->val));
         genDotAVL(root->r, fp);
     }
 }
