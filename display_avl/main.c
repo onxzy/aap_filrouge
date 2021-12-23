@@ -35,10 +35,16 @@ int main(int argc, char ** argv) {
     // récupérer le fichier
     FILE *file = fopen(filePath, "r");
 
+    /*
+
+        Gérer le pbm du fichier n'existe pas qui cause un seg fault !
+
+    */
+
 
     // lire le fichier ligne par lignes jusqu'à n lignes
     int nb_lignes = 0;
-    char prenom[128] = {'\0'};
+    char prenom[128] = {'\0'}; // On fixe la longueur max d'un prenom à 128
 
     char c;
     int i = 0;
@@ -56,7 +62,6 @@ int main(int argc, char ** argv) {
         
         prenom[i] = c;
         i++;
-        // printf("%c", c);
     }      
 
 
