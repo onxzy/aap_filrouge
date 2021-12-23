@@ -1,1 +1,1 @@
-main.c ../elt.c ../avl.c
+main.c avl/avl.c
