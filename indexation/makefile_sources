@@ -1,1 +1,1 @@
-main.c ../elt.c ../avl.c quick_sort.c
+main.c avl/avl.c quick_sort.c

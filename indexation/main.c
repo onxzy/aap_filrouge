@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 //#define CLEAR2CONTINUE
 #include "../include/traces.h" 
 
-// C'est dans le fichier elt.h qu'on doit choisir l'implémentation des T_elt
-#include "../elt.h"
-#include "../avl.h"
-#include "quick_sort.h"
-
-void signature(char** mot);
+#include "avl/avl.h"
 
 int main(int argc, char ** argv) {
     
@@ -29,12 +25,6 @@ int main(int argc, char ** argv) {
     // récupérer le fichier
     FILE *file = fopen(filepath, "r");
 
-    // char t[] = {26,17,28,8,2,25,1,20,15,18,30,13,22,7,29,14,27,5,19,16,23,21,6,24,11,10,4,12,9,3,0,2};
-
-    // int n = sizeof(t)/sizeof(char);
-
-    // quickSort(t, n);
-
     // lire le fichier ligne par lignes jusqu'à n lignes
     int nb_lignes = 0;
     char mot[128] = {'\0'}; // On fixe la longueur max d'un mot à 128
@@ -48,17 +38,14 @@ int main(int argc, char ** argv) {
             mot[i+1] = '\0'; // indique la fin du string
             insertAVL(&root, mot);
 
-            i = 0; // remet le pointeur d'index pour le string du prénom au début
+            i = 0; // remet le pointeur d'index pour le string du mot au début
         }
         
         mot[i] = c;
         i++;
-        // printf("%c", c);
     }  
 
     createDotAVL(root, "root");    
 
-
-
-
 }
+
