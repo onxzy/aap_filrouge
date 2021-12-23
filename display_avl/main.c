@@ -6,8 +6,8 @@
 #include "../include/traces.h" 
 
 // C'est dans le fichier elt.h qu'on doit choisir l'implémentation des T_elt
-#include "../elt.h"
-#include "../avl.h"
+#include "avl/elt.h"
+#include "avl/avl.h"
 
 int main(int argc, char ** argv) {
     // récuperer les arguments en entrée
