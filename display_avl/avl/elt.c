@@ -2,7 +2,7 @@
 #include <string.h> // strdup
 
 //#define CLEAR2CONTINUE
-#include "include/traces.h" 
+#include "../../include/traces.h" 
 
 #include "elt.h"
 

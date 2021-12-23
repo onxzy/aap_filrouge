@@ -52,16 +52,19 @@ int main(int argc, char ** argv) {
         if (c == '\n') {
             nb_lignes++;
 
-            prenom[i+1] = '\0'; // indique la fin du string
+            prenom[i] = '\0'; // indique la fin du string
             insertAVL(&root, prenom);
             createDotAVL(root, "root");
 
             i = 0; // remet le pointeur d'index pour le string du prénom au début
             if (nb_lignes >= n) break; // finir la boucle si on a lu n lignes
+            
+        } else {
+            prenom[i] = c;
+            i++;
         }
         
-        prenom[i] = c;
-        i++;
+        
     }      
 
 

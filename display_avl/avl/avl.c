@@ -3,10 +3,10 @@
 #include <string.h>
 
 //#define CLEAR2CONTINUE
-#include "include/traces.h" 
+#include "../../include/traces.h" 
 
 //#define DEBUG
-#include "include/check.h"
+#include "../../include/check.h"
 
 #include "elt.h" // T_elt 
 #include "avl.h" // prototypes 
