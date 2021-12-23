@@ -66,18 +66,12 @@ static T_avl newNodeAVL(T_elt e) {
  
 
 int	insertAVL (T_avlNode ** pRoot, T_elt e) {
-	// ordre de récurrence ? 
-	// cas de base ?
-	// cas général 
-
 	int deltaH;
 
 	if ((*pRoot) == NULL) {
 		(*pRoot) = newNodeAVL(e);
 		return 1;
 	} 
-
-
 
 	if (e <= (*pRoot)->val) {
 		deltaH = insertAVL(&((*pRoot)->l), e);
@@ -87,8 +81,6 @@ int	insertAVL (T_avlNode ** pRoot, T_elt e) {
 		(*pRoot)->bal += (-deltaH);
 	}
 
-	// printf("==== après insertion ====\n");
-	// printAVL((*pRoot), 0); 
 
 	if (deltaH == 0) {
 		return 0;
@@ -102,29 +94,6 @@ int	insertAVL (T_avlNode ** pRoot, T_elt e) {
 	} else {
 		return 0;
 	}
-
-	// printf("==== après balance ====\n");
-	// printAVL((*pRoot), 0);
-
-
-/*
-
-Si (e est inférieur ou égal à l’élément dans la racine)
-	deltaH = insertAVL(...)        // insertion dans sous-arbre gauche
-	(*pA)->bal +=  +deltaH        // mise à jour du facteur de déséquilibre
-Sinon 
-	deltaH = insertAVL(...)        // insertion dans sous-arbre droit
-	(*pA)->bal +=  -deltaH        // mise à jour du facteur de déséquilibre
-Si (deltaH == 0)
-	Renvoyer 0         // pas de modification de hauteur : on renvoie 0
-Sinon                            // le sous-arbre renvoyé par l’appel récursif a grandi
-    *pA = balanceAVL(*pA)         // on rééquilibre
-Si (le facteur de déséquilibre de A n’est pas redevenu nul)
-	Renvoyer 1
-Sinon Renvoyer 0
-
-
-*/
 
 }
 
@@ -193,21 +162,6 @@ static T_avlNode * balanceAVL(T_avlNode * A) {
 	}
 
 	return A;
-
-
-	/*
-
-Si (A penche à gauche)
-	Si (A->l penche à droite) 
-		A->l = rotateLeftAVL(A->l)
-		Renvoyer rotateRightAVL(A)
-	Sinon 
-		Renvoyer rotateRightAVL(A)
-Si (A penche à droite)
-    … (à terminer)
-
-
-	*/
 
 }
 
