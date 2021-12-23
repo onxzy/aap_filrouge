@@ -16,6 +16,8 @@
 	// 	(utiliser une variable statique)
 	/////////////////////////////////////////////////////////////////////////
 
+	//test
+
 #ifdef ELT_CHAR
 // T_elt est un char... 
 char * toString(T_elt e) {
