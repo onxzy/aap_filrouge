@@ -6,7 +6,9 @@
 //#define CLEAR2CONTINUE
 #include "../include/traces.h" 
 
+#include "main.h"
 #include "avl/avl.h"
+
 
 int main(int argc, char ** argv) {
     
@@ -27,7 +29,7 @@ int main(int argc, char ** argv) {
 
     // lire le fichier ligne par lignes jusqu'à n lignes
     int nb_lignes = 0;
-    char mot[128] = {'\0'}; // On fixe la longueur max d'un mot à 128
+    char mot[MAXWORDLEN] = {'\0'}; // On fixe la longueur max d'un mot à 128
 
     char c;
     int i = 0;
@@ -35,16 +37,18 @@ int main(int argc, char ** argv) {
         if (c == '\n') {
             nb_lignes++;
 
-            mot[i+1] = '\0'; // indique la fin du string
-            insertAVL(&root, mot);
+            mot[i] = '\0'; // indique la fin du string
+            indexWord(&root, mot);
 
             i = 0; // remet le pointeur d'index pour le string du mot au début
+        } else {
+            mot[i] = c;
+            i++;
         }
         
-        mot[i] = c;
-        i++;
+        
     }  
-
+    printf("\n\n");
     createDotAVL(root, "root");    
 
 }

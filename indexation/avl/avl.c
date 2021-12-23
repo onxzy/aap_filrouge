@@ -17,21 +17,21 @@ static T_avl newNodeAVL(char *e);
 static T_avlNode * rotateLeftAVL (T_avlNode * A); 
 static T_avlNode * rotateRightAVL (T_avlNode * B);
 static T_avlNode * balanceAVL(T_avlNode * A);
-static char *signature(char* mot);
+static char *hash(char* mot);
 
 
 // Utilitaires
-static int max(a, b) {
+static int max(int a, int b) {
 	if (a > b) return a;
 	else return b;
 }
 
-static int min(a, b) {
+static int min(int a, int b) {
 	if (a < b) return a;
 	else return b;
 }
 
-static int v_abs(a) {
+static int v_abs(int a) {
 	if (a >= 0) return a;
 	else return -a;
 }
@@ -44,8 +44,9 @@ static T_avl newNodeAVL(char *e) {
 
 	T_avlNode * node = (T_avlNode *) malloc(sizeof(T_avlNode));
 
-	node->val = strdup(e);
-	node->signature = signature(e);
+	// node->val = hash(e);
+	node->hash = hash(e);
+	node->words = newList(e);
 	node->bal = BALANCED;
 	node->l = NULL;
 	node->r = NULL;
@@ -54,10 +55,56 @@ static T_avl newNodeAVL(char *e) {
 
 } 
 
-static char *signature(char* mot) {
+static char *hash(char* mot) {
     char *sign = strdup(mot);
     quickSort(sign, strlen(sign));
     return sign;
+}
+
+static int sign_comp(char* e, T_avlNode * pRoot) {
+	return hash(e) <= pRoot->hash;
+}
+
+void indexWord(T_avlNode ** pRoot, char *e) {
+
+	#ifdef SHOWDEBUG
+	printf("### indexing %s ... \n", e);
+
+	printf(">> Word infos \n");
+	printf(">> + len %d \n", strlen(e));
+	printf(">> + hash %s \n", hash(e));
+	#endif
+
+	// Chercher si le hash n'est pas déjà dans l'index
+	T_avlNode * hashNode = searchAVL(*pRoot, e);
+	
+	
+	if (hashNode != NULL) {
+		// si oui l'ajouter dans la liste de la node où il est
+		pushList(&(hashNode->words), e); 
+
+		#ifdef SHOWDEBUG
+		printf("> Found at hash %s \n", hashNode->hash);
+		printf("words list : ");
+		printList(hashNode->words);
+		#endif
+
+		// char *str = (char *) malloc(sizeof(char)*MAXWORDLEN*hashNode->words.size);
+		// sprintList(&str, hashNode->words);
+		// printf("%s\n", str);
+	} else {
+		// sinon rajouter une node avec le nouvel hash
+		insertAVL(pRoot, e);
+
+		#ifdef SHOWDEBUG
+		printf("> Not found, creating and inserting new node \n");
+		#endif
+	}
+
+	
+	#ifdef SHOWDEBUG
+	printf("\n\n");
+	#endif
 }
 
 int	insertAVL (T_avlNode ** pRoot, char *e) {
@@ -68,7 +115,8 @@ int	insertAVL (T_avlNode ** pRoot, char *e) {
 		return 1;
 	} 
 
-	if (e <= (*pRoot)->val) {
+	if (sign_comp(e, *pRoot)) {
+	// if (e <= (*pRoot)->val) {
 		deltaH = insertAVL(&((*pRoot)->l), e);
 		(*pRoot)->bal += deltaH;
 	} else {
@@ -178,7 +226,7 @@ void printAVL(T_avl root, int indent) {
 		printAVL(root->r, indent+1);
 		// afficher le noeud racine 
 		for(i=0;i<indent;i++) printf("\t");
-		printf("(%s, %d)\n", root->val, root->bal);
+		printf("(%s, %d)\n", root->hash, root->bal);
 		// afficher le sous-arbre gauche avec indentation+1
 		printAVL(root->l, indent+1);
 	}
@@ -204,28 +252,13 @@ int nbNodesAVL(T_avl root){
 }
 
 
-T_avlNode * searchAVL_rec(T_avl root, char *e){
-	// recherche récursive
-
-	// ordre de récurrence : hauteur de l'arbre 	
-	int test; 
-
-	// base 
-	if (root== NULL) return NULL; 
-	else {
-		test = strcmp(e,root->val); 
-		if (test == 0) return root; // trouvé ! 
-		else if (test <= 0) return searchAVL_rec(root->l,e);
-		else return searchAVL_rec(root->r,e);
-	}
-}
-
-T_avlNode * searchAVL_it(T_avl root, char *e){
+T_avlNode * searchAVL(T_avl root, char *e) {
 	// recherche itérative
 
 	int test;
+	char *e_hash = hash(e);
 	while(root!=NULL) {	
-		test = strcmp(e,root->val);
+		test = strcmp(e_hash,root->hash);
 		if (test ==0) return root;
 		else if  (test <= 0) root = root->l; 
 		else root = root->r; 
@@ -241,32 +274,41 @@ static void  genDotAVL(T_avl root, FILE *fp) {
 	// => elles renvoient toujours la même adresse 
 	// => on ne peut pas faire deux appels à toString dans le même printf()
 
-    fprintf(fp, "\t\"%s\"",(root->val)); 
-    fprintf(fp, " [label = \"{{<c> %s | <b> %s} | { <g> | <d>}}\"];\n",(root->val), root->signature);
+	char *str_words_buffer = (char *) malloc(sizeof(char)*MAXWORDLEN*root->words.size);
+	
+	sprintList(&str_words_buffer, root->words);
+
+	#ifdef SHOWDEBUG
+	printf("%s\n", str_words_buffer);
+	#endif
+
+    fprintf(fp, "\t\"%s\"",(root->hash)); 
+    fprintf(fp, " [label = \"{{<c> %s} | {<b> %s} | { <g> | <d>}}\"];\n",root->hash, str_words_buffer);
     if (root->r == NULL && root->l == NULL) {
-        fprintf(fp, "\t\"%s\"", (root->val)); 
-		fprintf(fp, " [label = \"{{<c> %s | <b> %s} | { <g> NULL | <d> NULL}}\"];\n", (root->val), root->signature);
+        fprintf(fp, "\t\"%s\"", (root->hash)); 
+		fprintf(fp, " [label = \"{{<c> %s} | {<b> %s} | { <g> NULL | <d> NULL}}\"];\n",root->hash, str_words_buffer);
 	}
     else if (root->r == NULL) {
-        fprintf(fp, "\t\"%s\"", (root->val));
-		fprintf(fp, " [label = \"{{<c> %s | <b> %s} | { <g> | <d> NULL}}\"];\n", (root->val), root->signature);
+        fprintf(fp, "\t\"%s\"", (root->hash));
+		fprintf(fp, " [label = \"{{<c> %s} | {<b> %s} | { <g> | <d> NULL}}\"];\n",root->hash, str_words_buffer);
 	}
 	else if ( root->l == NULL) {
-        fprintf(fp, "\t\"%s\"",(root->val));
-		fprintf(fp, " [label = \"{{<c> %s | <b> %s} | { <g> NULL | <d> }}\"];\n", (root->val), root->signature);
+        fprintf(fp, "\t\"%s\"",(root->hash));
+		fprintf(fp, " [label = \"{{<c> %s} | {<b> %s} | { <g> NULL | <d>}}\"];\n",root->hash, str_words_buffer);
 	}
 	
     if (root->l) {
-        fprintf(fp, "\t\"%s\"",(root->val));
-		fprintf(fp, ":g -> \"%s\";\n", (root->l->val));
+        fprintf(fp, "\t\"%s\"",(root->hash));
+		fprintf(fp, ":g -> \"%s\";\n", (root->l->hash));
         genDotAVL(root->l, fp);
     }
 
     if (root->r) {
-        fprintf(fp, "\t\"%s\"",(root->val));
-		fprintf(fp,":d -> \"%s\";\n", (root->r->val));
+        fprintf(fp, "\t\"%s\"",(root->hash));
+		fprintf(fp,":d -> \"%s\";\n", (root->r->hash));
         genDotAVL(root->r, fp);
     }
+
 }
 
 

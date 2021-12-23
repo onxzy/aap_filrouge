@@ -1,1 +1,1 @@
-main.c avl/avl.c quick_sort.c
+main.c avl/avl.c avl/dynamicList.c quick_sort.c
