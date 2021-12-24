@@ -73,7 +73,8 @@ int	insertAVL (T_avlNode ** pRoot, T_elt e) {
 		return 1;
 	} 
 
-	if (e <= (*pRoot)->val) {
+	// if (e <= (*pRoot)->val) {
+	if (eltcmp(e,(*pRoot)->val) <= 0) {
 		deltaH = insertAVL(&((*pRoot)->l), e);
 		(*pRoot)->bal += deltaH;
 	} else {
