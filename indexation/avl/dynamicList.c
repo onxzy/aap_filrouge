@@ -24,11 +24,13 @@ void pushList(T_list *list, char *word) {
 
 void printList(T_list list) {
     printf("[");
-    for (int i = 0; i < list.used; i++)
+    int i;
+    for (i = 0; i < list.used - 1; i++)
     {
         // printf("%s\n", list.list[i]);
         printf("%s,", list.list[i]);
     }
+    printf("%s", list.list[i]);
     printf("]\n");
 }
 
@@ -39,6 +41,14 @@ void sprintList(char **str, T_list list) {
         sprintf(*str + strlen(*str), "%s,", list.list[i]);
     }
     sprintf(*str + strlen(*str), "]");
+}
+
+int searchList(T_list list, char *word) {
+    for (int i = 0; i < list.used; i++)
+    {
+        if (strcmp(list.list[i], word) == 0) return 1;
+    }
+    return 0;
 }
 
 // // Test
@@ -60,4 +70,8 @@ void sprintList(char **str, T_list list) {
 //     char *str = (char *) malloc(sizeof(char)*MAXWORDLEN*list.size);
 //     sprintList(&str, list);
 //     printf("%s\n", str);
+
+//     printf("search 'je' : %d\n", searchList(list, "je"));
+//     printf("search 'listes' : %d\n", searchList(list, "listes"));
+//     printf("search 'non' : %d\n", searchList(list, "non"));
 // }

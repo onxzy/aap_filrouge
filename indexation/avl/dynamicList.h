@@ -14,3 +14,4 @@ T_list newList(char *word);
 void pushList(T_list *list, char *word);
 void printList(T_list list);
 void sprintList(char **str, T_list list);
+int searchList(T_list list, char *word);

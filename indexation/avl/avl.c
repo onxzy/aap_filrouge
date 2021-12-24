@@ -62,13 +62,13 @@ static char *hash(char* mot) {
 }
 
 static int sign_comp(char* e, T_avlNode * pRoot) {
-	return hash(e) <= pRoot->hash;
+	return (strcmp(hash(e), pRoot->hash) <= 0);
 }
 
-void indexWord(T_avlNode ** pRoot, char *e) {
+int indexWord(T_avlNode ** pRoot, char *e) {
 
 	#ifdef SHOWDEBUG
-	printf("### indexing %s ... \n", e);
+	printf("\n\n### indexing %s ... \n", e);
 
 	printf(">> Word infos \n");
 	printf(">> + len %d \n", strlen(e));
@@ -76,7 +76,8 @@ void indexWord(T_avlNode ** pRoot, char *e) {
 	#endif
 
 	// Chercher si le hash n'est pas déjà dans l'index
-	T_avlNode * hashNode = searchAVL(*pRoot, e);
+	int depth;
+	T_avlNode * hashNode = searchHash(*pRoot, e, &depth);
 	
 	
 	if (hashNode != NULL) {
@@ -89,6 +90,8 @@ void indexWord(T_avlNode ** pRoot, char *e) {
 		printList(hashNode->words);
 		#endif
 
+		return 1;
+
 		// char *str = (char *) malloc(sizeof(char)*MAXWORDLEN*hashNode->words.size);
 		// sprintList(&str, hashNode->words);
 		// printf("%s\n", str);
@@ -99,12 +102,10 @@ void indexWord(T_avlNode ** pRoot, char *e) {
 		#ifdef SHOWDEBUG
 		printf("> Not found, creating and inserting new node \n");
 		#endif
+
+		return 0;
 	}
 
-	
-	#ifdef SHOWDEBUG
-	printf("\n\n");
-	#endif
 }
 
 int	insertAVL (T_avlNode ** pRoot, char *e) {
@@ -208,12 +209,37 @@ static T_avlNode * balanceAVL(T_avlNode * A) {
 
 
 
+T_list * searchWord(T_avl root, char * word, int *pDepth) {
+	T_avlNode *foundNode = searchHash(root, word, pDepth);
+	
+	if (foundNode == NULL) return NULL;
 
+	if (searchList(foundNode->words, word)) return &(foundNode->words);
 
+	return NULL;
 
+}
 
+T_avlNode * searchHash(T_avl root, char *e, int* pDepth) {
 
-// IDEM pour ABR 
+	*pDepth = 0;
+
+	int test;
+	char *e_hash = hash(e);
+
+	while(root!=NULL) {	
+		test = strcmp(e_hash, root->hash);
+
+		if (test == 0) return root;
+		else if  (test <= 0) root = root->l; 
+		else root = root->r; 
+
+		*pDepth += 1;
+	}
+
+	// pas trouvé (ou vide)
+	return NULL;  
+}
 
 void printAVL(T_avl root, int indent) {
 	int i; 
@@ -250,24 +276,6 @@ int nbNodesAVL(T_avl root){
 	
 	return 1+ nbNodesAVL(root->l) + nbNodesAVL(root->r);
 }
-
-
-T_avlNode * searchAVL(T_avl root, char *e) {
-	// recherche itérative
-
-	int test;
-	char *e_hash = hash(e);
-	while(root!=NULL) {	
-		test = strcmp(e_hash,root->hash);
-		if (test ==0) return root;
-		else if  (test <= 0) root = root->l; 
-		else root = root->r; 
-	}
-
-	// pas trouvé (ou vide)
-	return NULL;  
-}
-
 
 static void  genDotAVL(T_avl root, FILE *fp) {
 	// Attention : les fonction toString utilisent un buffer alloué comme une variable statique 

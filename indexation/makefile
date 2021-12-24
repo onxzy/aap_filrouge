@@ -13,7 +13,7 @@ all: $(CIBLE)
 $(CIBLE) : $(SOURCES)
 	@echo -n "Production de $(CIBLE)"
 	@echo " à partir des fichiers : $(SOURCES)"
-	gcc $(CFLAGS) $(SOURCES) -o $@
+	gcc $(CFLAGS) $(SOURCES) -lm -o $@
 
 clean: 
 	@echo "Nettoyage de $(CIBLE)"

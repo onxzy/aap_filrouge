@@ -20,11 +20,12 @@ typedef struct node{
 
 extern char * outputPath;
 
-void indexWord(T_avlNode ** pRoot, char *e);
+int indexWord(T_avlNode ** pRoot, char *e);
 int	insertAVL (T_avlNode ** root, char *e);
 void printAVL(T_avl root, int indent); 
 int heightAVL(T_avl);
 int nbNodesAVL(T_avl);
-T_avlNode * searchAVL(T_avl root, char *e);
+T_avlNode * searchHash(T_avl root, char *e, int* pDepth);
+T_list * searchWord(T_avl root, char * word, int *pDepth);
 
 void createDotAVL(const T_avl root, const char *basename); 
