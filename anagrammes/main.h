@@ -1,0 +1,2 @@
+#define MAXWORDLEN 128
+// #define SHOWDEBUG
