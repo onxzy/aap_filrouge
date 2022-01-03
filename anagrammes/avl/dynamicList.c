@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../main.h"
 #include "dynamicList.h"
 
 T_list newList(char *word) {
@@ -22,13 +23,17 @@ void pushList(T_list *list, char *word) {
     list->list[list->used++] = strdup(word);
 }
 
+int lengthList(T_list list) {
+    return list.used;
+}
+
 void printList(T_list list) {
     printf("[");
     int i;
     for (i = 0; i < list.used - 1; i++)
     {
         // printf("%s\n", list.list[i]);
-        printf("%s,", list.list[i]);
+        printf("%s, ", list.list[i]);
     }
     printf("%s", list.list[i]);
     printf("]\n");
@@ -41,6 +46,18 @@ void sprintList(char **str, T_list list) {
         sprintf(*str + strlen(*str), "%s,", list.list[i]);
     }
     sprintf(*str + strlen(*str), "]");
+}
+
+void fprintList(FILE * fp, T_list list) {
+    fprintf(fp, "[");
+    int i;
+    for (i = 0; i < list.used - 1; i++)
+    {
+        fprintf(fp, list.list[i]);
+        fprintf(fp, ", ");
+    }
+    fprintf(fp, list.list[i]);
+    fprintf(fp, "]\n");
 }
 
 int searchList(T_list list, char *word) {

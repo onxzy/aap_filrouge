@@ -8,6 +8,7 @@
 //#define DEBUG
 #include "../../include/check.h"
 
+#include "../main.h"
 #include "avl.h" // prototypes 
 #include "../quick_sort.h"
 
@@ -65,6 +66,8 @@ static int sign_comp(char* e, T_avlNode * pRoot) {
 	return (strcmp(hash(e), pRoot->hash) <= 0);
 }
 
+// return 1 if a corresponding hash node was found
+// -1 if word was already in node words list
 int indexWord(T_avlNode ** pRoot, char *e) {
 
 	#ifdef SHOWDEBUG
@@ -82,15 +85,18 @@ int indexWord(T_avlNode ** pRoot, char *e) {
 	
 	if (hashNode != NULL) {
 		// si oui l'ajouter dans la liste de la node où il est
-		pushList(&(hashNode->words), e); 
+		if (!searchList(hashNode->words, e)) {
+			pushList(&(hashNode->words), e);
+			return 1; 
+		} else {
+			return -1;
+		}
 
-		#ifdef SHOWDEBUG
-		printf("> Found at hash %s \n", hashNode->hash);
-		printf("words list : ");
-		printList(hashNode->words);
-		#endif
-
-		return 1;
+		// #ifdef SHOWDEBUG
+		// printf("> Found at hash %s \n", hashNode->hash);
+		// printf("words list : ");
+		// printList(hashNode->words);
+		// #endif
 
 		// char *str = (char *) malloc(sizeof(char)*MAXWORDLEN*hashNode->words.size);
 		// sprintList(&str, hashNode->words);
@@ -207,7 +213,14 @@ static T_avlNode * balanceAVL(T_avlNode * A) {
 }
 
 
+void loopAVL(T_avl root, void *f(T_avl root, int *nb_anagrammes, T_avlNode **ana_nodes), int *nb_anagrammes, T_avlNode **ana_nodes) {
+	if (root== NULL) return;
 
+	loopAVL(root->l, f, nb_anagrammes, ana_nodes); 		 
+	loopAVL(root->r, f, nb_anagrammes, ana_nodes); 
+	
+	*f(root, nb_anagrammes, ana_nodes);
+}
 
 T_list * searchWord(T_avl root, char * word, int *pDepth) {
 	T_avlNode *foundNode = searchHash(root, word, pDepth);

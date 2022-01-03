@@ -15,6 +15,7 @@
 long ms();
 long start_time, end_time;
 T_avl indexing(char* filepath);
+void searchAnagrammes(T_avl root, int *nb_anagrammes, T_avlNode **ana_nodes);
 
 int main(int argc, char ** argv) {
 
@@ -34,21 +35,47 @@ int main(int argc, char ** argv) {
 
     if (root == NULL) return 0;
 
+    int nb_anagrammes = 0;
+    T_avlNode **ana_nodes = (T_avlNode **) malloc(sizeof(T_avlNode *) * nbNodesAVL(root));
+    loopAVL(root, searchAnagrammes, &nb_anagrammes, ana_nodes);
+    printf(GRNB " " reset " • Nombre d' anagrammes : %d\n", nb_anagrammes);
+    nd_quickSort(ana_nodes, nb_anagrammes);
+
     printf("\n");
     printf("\n");
     printf("\n");
 
 
-    // outputPath = "output";
-    // createDotAVL(root, "root");  
+    printf(BLK WHTB " LISTE D'ANAGRAMMES PRÊTE                                                      "reset "\n");
+    printf("\n");
+    printf(BLK WHTB " ^C " reset " Quitter " BLK WHTB " t " reset " Afficher la liste dans le terminal " BLK WHTB " f " reset " Écrire la liste dans un fichier" "\n");
+    printf("\n");
+    printf(CYN "Si votre entrée n'est pas comprise, l'option t est appliquée." reset "\n");
+    printf("> Votre choix : " MAG);
+    char choice[1] = {'\0'};
+    scanf("%1s", choice);
+    printf(reset "\n");
 
-    searching(root);
-    
-    // scanf();
-    // // printf("• Nombre de hash : %d\n", nb_found);
-    // // printf("%d\n", nb_found);
-    // printf("\n\n");
-    // createDotAVL(root, "root");    
+    if (choice[0] == 'f') {
+        FILE * fp = fopen("anagrammes.txt", "w");
+        for (int i = 0; i <= nb_anagrammes; i++)
+        {
+            if ((ana_nodes[i]) != NULL) {
+                fprintList(fp, (ana_nodes[i])->words);
+            }
+        }
+
+        printf(GRNB " " reset GRN " ✓ Liste dans le fichier : " reset MAG "./anagrammes.txt !\n" reset);
+    } else {
+        for (int i = 0; i <= nb_anagrammes; i++)
+        {
+            if ((ana_nodes[i]) != NULL) {
+                printList((ana_nodes[i])->words);
+            }
+        }
+    }
+
+    printf("\n");
     return 0;
 }
 
@@ -92,12 +119,13 @@ T_avl indexing(char* filepath) {
 
     // lire le fichier ligne par lignes jusqu'à n lignes
     int nb_lignes = 0;
+    int duplicates_words = 0;
     char mot[MAXWORDLEN] = {'\0'}; // On fixe la longueur max d'un mot à 128
 
     char c;
     int i = 0;
     // Stats
-    int nb_found = 0;
+    // int nb_found = 0;
     int nb_char = 0;
     while ( (c = fgetc(file)) != EOF) {
         nb_char++;
@@ -106,7 +134,9 @@ T_avl indexing(char* filepath) {
             nb_lignes++;
 
             mot[i] = '\0'; // indique la fin du string
-            nb_found += indexWord(&root, mot);
+            if (indexWord(&root, mot) == -1) {
+                duplicates_words+= 1;
+            }
 
             i = 0; // remet le pointeur d'index pour le string du mot au début
         } else {
@@ -128,65 +158,22 @@ T_avl indexing(char* filepath) {
     int nbNodes = nbNodesAVL(root);
     printf(BLUB " STATISTIQUES                                                                  \n" reset);
     printf(BLUB " " reset " • Nombre de mots : %d\n", nb_lignes);
-    printf(BLUB " " reset " • Taille des mots : %d\n", nb_char);
+    printf(BLUB " " reset " • Nombre de mots uniques : %d\n", nb_lignes - duplicates_words);
+    // printf(BLUB " " reset " • Taille des mots : %d\n", nb_char);
     printf(BLUB " " reset " • Nombre de noeuds : %d\n", nbNodes);
-    printf(BLUB " " reset " • Hauteur de l'AVL : %d\n", heightAVL(root));
-    printf(BLUB " " reset " • Hauteur minimale d'un arbre avec ce nombre de noeuds : %d\n", (int) log2(nbNodes));
+    // printf(BLUB " " reset " • Hauteur de l'AVL : %d\n", heightAVL(root));
+    // printf(BLUB " " reset " • Hauteur minimale d'un arbre avec ce nombre de noeuds : %d\n", (int) log2(nbNodes));
     printf("\n");
 
     return root;
 
 }
 
-
-void searching(T_avl root) {
-
-    static int displayHeading = 1;
-    if (displayHeading) {
-        printf(BLK WHTB " CHERCHER UN MOT DANS LE DICTIONNAIRE                                          "reset "\n");
-        printf("\n");
-        printf(BLK WHTB " ^C " reset " Quitter" "\n");
-        printf("\n");
-        displayHeading = 0;
+void searchAnagrammes(T_avl root, int *nb_anagrammes, T_avlNode **ana_nodes) {
+    if (lengthList(root->words) > 1) {
+        *nb_anagrammes += 1;
+        ana_nodes[*nb_anagrammes] = root;
     }
-
-    
-    printf(CYN "Entrez votre mot en MAJUSCULES, sans espaces et caractères spéciaux." reset "\n");
-    printf("> Mot à chercher : " MAG);
-    char word[128] = {'\0'};
-    scanf("%127s", word);
-    printf(reset "\n");
-
-    search(root, word);
-
-    
-    searching(root);
-
 }
 
-void search(T_avl root, char * word) {
-    int depth;
-    
-    printf(CYNB " INFO " reset " " "Recherche du mot " MAG "%s" reset, word);
 
-    start_time = ns(); // Intilialisation du compteur de temps
-    T_list * words = searchWord(root, word, &depth);
-    end_time = ns();
-
-    printf("\33[2K\r"); // Permet d'effacer la dernière ligne du terminal
-
-    if (words == NULL) {
-        printf(REDB " " reset RED " ✘ Non trouvé !\n" reset);
-
-        printf(REDB " " reset " • Temps écoulé : " MAG "%fms" reset "\n", (end_time - start_time)/1e3);
-    } else {
-        printf(GRNB " " reset GRN " ✓ Trouvé !\n" reset);
-
-        printf(GRNB " " reset " • Temps écoulé : " MAG "%fms" reset "\n", (end_time - start_time)/1e3);
-        printf(GRNB " " reset " • Profondeur : " MAG "%d" reset "\n", depth);
-        printf(GRNB " " reset " • Mots dans cette node : " MAG); printList(*words); printf(reset);
-
-    }
-
-    printf("\n");
-}
