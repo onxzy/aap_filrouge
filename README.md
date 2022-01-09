@@ -1,26 +1,26 @@
 # Fil Rouge AAP
 
-##Contributeurs
+## Contributeurs
 
 - Thomas Descorsiers
 - Tanguy de Richecour
 - Mélina Dupuy
 - Céline Barbet
 
-##Lien vers Github
+## Lien vers Github
 
 https://github.com/onxzy/aap_filrouge
 
-##Description
+## Description
 
 Ce dossier contient les trois programmes réalisés au cours du fil rouge d'AAP, ainsi qu'un dossier "include" possédant différentes fonctions utiles.
 
-##Dépendances
+## Dépendances
 
 - gcc pour la compilation
 - Graphviz pour l'ouverture des fichiers png
 
-##Chemins possibles
+## Chemins possibles
 
 | Dossier | Chemin | 
 | - | - |
