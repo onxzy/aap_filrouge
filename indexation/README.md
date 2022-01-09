@@ -31,4 +31,4 @@ $ ./indexation.exe ./dictionnaires/Dico_05.txt
 
 __Retour pour cet appel (en ayant recherché le mot "SPORT") :__
 
-![Getting Started](image_indexation.png)
+![indexation_output](image_indexation.png)

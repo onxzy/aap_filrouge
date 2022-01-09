@@ -21,4 +21,4 @@ __Exemple d'appel (pour n = 10) :__
 $ ./display_avl.exe Prenoms_V2.txt 10
 ```
 __Retour pour cet appel :__
-![Getting Started](image_display_avl.png)
+![display_avl_output](image_display_avl.png)

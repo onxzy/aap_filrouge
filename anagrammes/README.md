@@ -26,4 +26,4 @@ $ ./anagrammes.exe ./dictionnaires/Dico_06.txt
 ```
 
 __Retour pour cet appel :__
-![Getting Started](image_anagrammes.png)
+![anagrammes_output](image_anagrammes.png)

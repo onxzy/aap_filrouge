@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 
 # dot and pictures
-*.dot
-*.png
+display_avl/output/dot/*
+display_avl/output/png/*
