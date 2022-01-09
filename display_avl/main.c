@@ -13,7 +13,9 @@
 #include "main.h"
 
 int main(int argc, char ** argv) {
+
     system("clear");
+
 
     // récuperer les arguments en entrée
     if (argc != 3) {
@@ -26,7 +28,7 @@ int main(int argc, char ** argv) {
     }
 
     char *filePath = argv[1];
-    int n = atoi(argv[2]);
+    int n = atoi(argv[2]); // Transforme un string en int
 
     if (n < 1) {
         printf(REDB " ERREUR " reset " " "Merci d'entrer un nombre de mots " MAG ">= 1\n" reset);

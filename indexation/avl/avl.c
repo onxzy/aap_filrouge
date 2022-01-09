@@ -31,13 +31,6 @@ static int min(int a, int b) {
 	else return b;
 }
 
-static int v_abs(int a) {
-	if (a >= 0) return a;
-	else return -a;
-}
-
-
-
 
 // Base
 static T_avl newNodeAVL(char *e) {
@@ -65,6 +58,8 @@ static int sign_comp(char* e, T_avlNode * pRoot) {
 	return (strcmp(hash(e), pRoot->hash) <= 0);
 }
 
+// return 1 if a corresponding hash node was found
+// -1 if word was already in node words list
 int indexWord(T_avlNode ** pRoot, char *e) {
 
 	#ifdef SHOWDEBUG
@@ -80,24 +75,25 @@ int indexWord(T_avlNode ** pRoot, char *e) {
 	T_avlNode * hashNode = searchHash(*pRoot, e, &depth);
 	
 	
-	if (hashNode != NULL) {
-		// si oui l'ajouter dans la liste de la node où il est
-		if (!searchList(hashNode->words, e)) {
+	if (hashNode != NULL) { // si oui l'ajouter dans la liste de la node où il est
+		
+		#ifdef SHOWDEBUG
+		printf("> Found at hash %s \n", hashNode->hash);
+		printf("words list : ");
+		printList(hashNode->words);
+		#endif
+
+
+		if (!searchList(hashNode->words, e)) { // Si le mot n'est pas déjà dans la liste de cette node, l'ajouter
 			pushList(&(hashNode->words), e);
 			return 1; 
 		} else {
+			#ifdef SHOWDEBUG
+			printf("! Already in list\n");
+			#endif
 			return -1;
 		}
 
-		// #ifdef SHOWDEBUG
-		// printf("> Found at hash %s \n", hashNode->hash);
-		// printf("words list : ");
-		// printList(hashNode->words);
-		// #endif
-
-		// char *str = (char *) malloc(sizeof(char)*MAXWORDLEN*hashNode->words.size);
-		// sprintList(&str, hashNode->words);
-		// printf("%s\n", str);
 	} else {
 		// sinon rajouter une node avec le nouvel hash
 		insertAVL(pRoot, e);
@@ -120,7 +116,6 @@ int	insertAVL (T_avlNode ** pRoot, char *e) {
 	} 
 
 	if (sign_comp(e, *pRoot)) {
-	// if (e <= (*pRoot)->val) {
 		deltaH = insertAVL(&((*pRoot)->l), e);
 		(*pRoot)->bal += deltaH;
 	} else {
@@ -132,7 +127,9 @@ int	insertAVL (T_avlNode ** pRoot, char *e) {
 	if (deltaH == 0) {
 		return 0;
 	} else {
-		// printf(">>>> balance \n");
+		#ifdef SHOWDEBUG
+		printf(">>>> balance \n");
+		#endif
 		*pRoot = balanceAVL(*pRoot);
 	}
 
@@ -213,13 +210,12 @@ static T_avlNode * balanceAVL(T_avlNode * A) {
 
 
 T_list * searchWord(T_avl root, char * word, int *pDepth) {
-	T_avlNode *foundNode = searchHash(root, word, pDepth);
+
+	T_avlNode *foundNode = searchHash(root, word, pDepth); // On cherche si le hash est dans l'AVL
 	
-	if (foundNode == NULL) return NULL;
+	if (foundNode == NULL) return NULL; // si non on arrête là
 
-	if (searchList(foundNode->words, word)) return &(foundNode->words);
-
-	return NULL;
+	if (searchList(foundNode->words, word)) return &(foundNode->words); // si oui on cherche dans la liste de mots de ce noeud
 
 }
 

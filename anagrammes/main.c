@@ -32,14 +32,20 @@ int main(int argc, char ** argv) {
     }
     char *filepath = argv[1];
 
+    // indexation du dictionnaire
     T_avl root = indexing(filepath);
 
-    if (root == NULL) return 0;
+    if (root == NULL) return 0; // s'il est vide on s'arrete là
 
+    // on recherche toutes les nodes qui contiennent des anagrammes
+    // c'est à dire dont la liste de mots est de longueur > 1
     int nb_anagrammes = 0;
     T_avlNode **ana_nodes = (T_avlNode **) malloc(sizeof(T_avlNode *) * nbNodesAVL(root));
-    loopAVL(root, searchAnagrammes, &nb_anagrammes, ana_nodes);
+    loopAVL(root, searchAnagrammes, &nb_anagrammes, ana_nodes); // loopAVL permet de parcourir un AVL en appliquant la fonction f ici = searchAnagrammes
+
     printf(GRNB " " reset " • Nombre d' anagrammes : %d\n", nb_anagrammes);
+    
+    // on trie les nodes avec anagrammes dans l'ordre décroissant du nombre d'anagrammes (= nb de mots dans la liste des mots du noeud)
     nd_quickSort(ana_nodes, nb_anagrammes + 1);
 
     printf("\n");
@@ -49,18 +55,18 @@ int main(int argc, char ** argv) {
 
     printf(BLK WHTB " LISTE D'ANAGRAMMES PRÊTE                                                      "reset "\n");
     printf("\n");
+
+    // possibilité d'afficher les anagrammes dans le terminal ou dans un fichier
     printf(BLK WHTB " ^C " reset " Quitter " BLK WHTB " t " reset " Afficher la liste dans le terminal " BLK WHTB " f " reset " Écrire la liste dans un fichier" "\n");
     printf("\n");
     printf(CYN "Si votre entrée n'est pas comprise, l'option t est appliquée." reset "\n");
     printf("> Votre choix : " MAG);
-
     char choice[1] = {'\0'};
-    scanf("%1s", choice);
-
+    scanf("%1s", choice); // récuperation du choix
 
     printf(reset "\n");
 
-    if (choice[0] == 'f') {
+    if (choice[0] == 'f') { // affichage dans un fichier
         FILE * fp = fopen("anagrammes.txt", "w");
         for (int i = 0; i <= nb_anagrammes; i++)
         {
@@ -70,7 +76,7 @@ int main(int argc, char ** argv) {
         }
 
         printf(GRNB " " reset GRN " ✓ Liste dans le fichier : " reset MAG "./anagrammes.txt "reset "!\n");
-    } else {
+    } else { // affichage dans le terminal
         for (int i = 0; i <= nb_anagrammes; i++)
         {
             if ((ana_nodes[i]) != NULL) {
@@ -90,7 +96,7 @@ long ns() {
     return t.tv_sec*1000000 + t.tv_nsec/1e3;
 }
 
-T_avl indexing(char* filepath) {
+T_avl indexing(char* filepath) { // idem partie 2
 
     T_avl root = NULL;
 
@@ -163,10 +169,7 @@ T_avl indexing(char* filepath) {
     printf(BLUB " STATISTIQUES                                                                  \n" reset);
     printf(BLUB " " reset " • Nombre de mots : %d\n", nb_lignes);
     printf(BLUB " " reset " • Nombre de mots uniques : %d\n", nb_lignes - duplicates_words);
-    // printf(BLUB " " reset " • Taille des mots : %d\n", nb_char);
     printf(BLUB " " reset " • Nombre de noeuds : %d\n", nbNodes);
-    // printf(BLUB " " reset " • Hauteur de l'AVL : %d\n", heightAVL(root));
-    // printf(BLUB " " reset " • Hauteur minimale d'un arbre avec ce nombre de noeuds : %d\n", (int) log2(nbNodes));
     printf("\n");
 
     return root;

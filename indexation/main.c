@@ -31,25 +31,18 @@ int main(int argc, char ** argv) {
     }
     char *filepath = argv[1];
 
+    // indexation
     T_avl root = indexing(filepath);
 
-    if (root == NULL) return 0;
+    if (root == NULL) return 0; // Si le root était vide on arrête là
 
     printf("\n");
     printf("\n");
     printf("\n");
 
-
-    // outputPath = "output";
-    // createDotAVL(root, "root");  
-
+    // boucle de recherche
     searching(root);
-    
-    // scanf();
-    // // printf("• Nombre de hash : %d\n", nb_found);
-    // // printf("%d\n", nb_found);
-    // printf("\n\n");
-    // createDotAVL(root, "root");    
+
     return 0;
 }
 
@@ -108,7 +101,6 @@ T_avl indexing(char* filepath) {
             nb_lignes++;
 
             mot[i] = '\0'; // indique la fin du string
-            // nb_found += indexWord(&root, mot);
             if (indexWord(&root, mot) == -1) {
                 duplicates_words+= 1;
             }
@@ -159,14 +151,16 @@ void searching(T_avl root) {
     
     printf(CYN "Entrez votre mot en MAJUSCULES, sans espaces et caractères spéciaux." reset "\n");
     printf("> Mot à chercher : " MAG);
+
+    // récuperation du mot à chercher
     char word[128] = {'\0'};
     scanf("%127s", word);
+
     printf(reset "\n");
 
-    search(root, word);
-
+    search(root, word); // recherche du mot
     
-    searching(root);
+    searching(root); // boucle
 
 }
 
@@ -176,8 +170,8 @@ void search(T_avl root, char * word) {
     printf(CYNB " INFO " reset " " "Recherche du mot " MAG "%s" reset, word);
 
     start_time = ns(); // Intilialisation du compteur de temps
-    T_list * words = searchWord(root, word, &depth);
-    end_time = ns();
+    T_list * words = searchWord(root, word, &depth); // recherche du mot
+    end_time = ns(); // fin du compteur de temps
 
     printf("\33[2K\r"); // Permet d'effacer la dernière ligne du terminal
 
