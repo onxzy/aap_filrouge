@@ -213,13 +213,13 @@ static T_avlNode * balanceAVL(T_avlNode * A) {
 }
 
 
-void loopAVL(T_avl root, void *f(T_avl root, int *nb_anagrammes, T_avlNode **ana_nodes), int *nb_anagrammes, T_avlNode **ana_nodes) {
+void loopAVL(T_avl root, void f(T_avl root, int *nb_anagrammes, T_avlNode **ana_nodes), int *nb_anagrammes, T_avlNode **ana_nodes) {
 	if (root== NULL) return;
+
+	f(root, nb_anagrammes, ana_nodes);
 
 	loopAVL(root->l, f, nb_anagrammes, ana_nodes); 		 
 	loopAVL(root->r, f, nb_anagrammes, ana_nodes); 
-	
-	*f(root, nb_anagrammes, ana_nodes);
 }
 
 T_list * searchWord(T_avl root, char * word, int *pDepth) {

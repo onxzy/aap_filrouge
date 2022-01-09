@@ -35,17 +35,17 @@ static T_avlNode * rotateLeftAVL (T_avlNode * A);
 static T_avlNode * rotateRightAVL (T_avlNode * B);
 static T_avlNode * balanceAVL(T_avlNode * A);
 
-static int max(a, b) {
+static int max(int a, int b) {
 	if (a > b) return a;
 	else return b;
 }
 
-static int min(a, b) {
+static int min(int a, int b) {
 	if (a < b) return a;
 	else return b;
 }
 
-static int v_abs(a) {
+static int v_abs(int a) {
 	if (a >= 0) return a;
 	else return -a;
 }

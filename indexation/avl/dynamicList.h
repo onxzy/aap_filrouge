@@ -1,6 +1,6 @@
 #include "../main.h"
 
-#define START_LEN 5
+#define START_LEN 1
 
 // On définit un type de liste à longueur variable
 typedef struct {

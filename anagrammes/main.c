@@ -10,6 +10,7 @@
 #include "../include/ansi_colors.h" 
 
 #include "main.h"
+#include "quick_sort.h"
 #include "avl/avl.h"
 
 long ms();
@@ -25,7 +26,7 @@ int main(int argc, char ** argv) {
     if (argc != 2) {
         printf(REDB " ERREUR " reset " " "Nombre d'arguments incorrect. Nombre attendu : " MAG "1\n" reset);
         printf("\n");
-        printf(CYNB " INFO " reset " " "Merci de préciser un chemin vers un dictionnaire.\n");
+        printf(CYNB " AIDE " reset " " "Merci de préciser un chemin vers un dictionnaire.\n");
         printf("\n");
         return 0;
     }
@@ -39,7 +40,7 @@ int main(int argc, char ** argv) {
     T_avlNode **ana_nodes = (T_avlNode **) malloc(sizeof(T_avlNode *) * nbNodesAVL(root));
     loopAVL(root, searchAnagrammes, &nb_anagrammes, ana_nodes);
     printf(GRNB " " reset " • Nombre d' anagrammes : %d\n", nb_anagrammes);
-    nd_quickSort(ana_nodes, nb_anagrammes);
+    nd_quickSort(ana_nodes, nb_anagrammes + 1);
 
     printf("\n");
     printf("\n");
@@ -52,8 +53,11 @@ int main(int argc, char ** argv) {
     printf("\n");
     printf(CYN "Si votre entrée n'est pas comprise, l'option t est appliquée." reset "\n");
     printf("> Votre choix : " MAG);
+
     char choice[1] = {'\0'};
     scanf("%1s", choice);
+
+
     printf(reset "\n");
 
     if (choice[0] == 'f') {
@@ -65,7 +69,7 @@ int main(int argc, char ** argv) {
             }
         }
 
-        printf(GRNB " " reset GRN " ✓ Liste dans le fichier : " reset MAG "./anagrammes.txt !\n" reset);
+        printf(GRNB " " reset GRN " ✓ Liste dans le fichier : " reset MAG "./anagrammes.txt "reset "!\n");
     } else {
         for (int i = 0; i <= nb_anagrammes; i++)
         {
@@ -175,5 +179,3 @@ void searchAnagrammes(T_avl root, int *nb_anagrammes, T_avlNode **ana_nodes) {
         ana_nodes[*nb_anagrammes] = root;
     }
 }
-
-

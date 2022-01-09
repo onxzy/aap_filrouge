@@ -12,9 +12,10 @@
 #include "main.h"
 #include "avl/avl.h"
 
-long ms();
 long start_time, end_time;
 T_avl indexing(char* filepath);
+void searching(T_avl root);
+void search(T_avl root, char * word);
 
 int main(int argc, char ** argv) {
 
@@ -24,7 +25,7 @@ int main(int argc, char ** argv) {
     if (argc != 2) {
         printf(REDB " ERREUR " reset " " "Nombre d'arguments incorrect. Nombre attendu : " MAG "1\n" reset);
         printf("\n");
-        printf(CYNB " INFO " reset " " "Merci de préciser un chemin vers un dictionnaire.\n");
+        printf(CYNB " AIDE " reset " " "Merci de préciser un chemin vers un dictionnaire.\n");
         printf("\n");
         return 0;
     }
@@ -92,6 +93,7 @@ T_avl indexing(char* filepath) {
 
     // lire le fichier ligne par lignes jusqu'à n lignes
     int nb_lignes = 0;
+    int duplicates_words = 0;
     char mot[MAXWORDLEN] = {'\0'}; // On fixe la longueur max d'un mot à 128
 
     char c;
@@ -106,7 +108,10 @@ T_avl indexing(char* filepath) {
             nb_lignes++;
 
             mot[i] = '\0'; // indique la fin du string
-            nb_found += indexWord(&root, mot);
+            // nb_found += indexWord(&root, mot);
+            if (indexWord(&root, mot) == -1) {
+                duplicates_words+= 1;
+            }
 
             i = 0; // remet le pointeur d'index pour le string du mot au début
         } else {
@@ -128,6 +133,7 @@ T_avl indexing(char* filepath) {
     int nbNodes = nbNodesAVL(root);
     printf(BLUB " STATISTIQUES                                                                  \n" reset);
     printf(BLUB " " reset " • Nombre de mots : %d\n", nb_lignes);
+    printf(BLUB " " reset " • Nombre de mots uniques : %d\n", nb_lignes - duplicates_words);
     printf(BLUB " " reset " • Taille des mots : %d\n", nb_char);
     printf(BLUB " " reset " • Nombre de noeuds : %d\n", nbNodes);
     printf(BLUB " " reset " • Hauteur de l'AVL : %d\n", heightAVL(root));

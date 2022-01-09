@@ -53,10 +53,10 @@ void fprintList(FILE * fp, T_list list) {
     int i;
     for (i = 0; i < list.used - 1; i++)
     {
-        fprintf(fp, list.list[i]);
+        fprintf(fp, "%s", list.list[i]);
         fprintf(fp, ", ");
     }
-    fprintf(fp, list.list[i]);
+    fprintf(fp, "%s", list.list[i]);
     fprintf(fp, "]\n");
 }
 

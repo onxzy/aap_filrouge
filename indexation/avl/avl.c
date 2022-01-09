@@ -82,15 +82,18 @@ int indexWord(T_avlNode ** pRoot, char *e) {
 	
 	if (hashNode != NULL) {
 		// si oui l'ajouter dans la liste de la node où il est
-		pushList(&(hashNode->words), e); 
+		if (!searchList(hashNode->words, e)) {
+			pushList(&(hashNode->words), e);
+			return 1; 
+		} else {
+			return -1;
+		}
 
-		#ifdef SHOWDEBUG
-		printf("> Found at hash %s \n", hashNode->hash);
-		printf("words list : ");
-		printList(hashNode->words);
-		#endif
-
-		return 1;
+		// #ifdef SHOWDEBUG
+		// printf("> Found at hash %s \n", hashNode->hash);
+		// printf("words list : ");
+		// printList(hashNode->words);
+		// #endif
 
 		// char *str = (char *) malloc(sizeof(char)*MAXWORDLEN*hashNode->words.size);
 		// sprintList(&str, hashNode->words);
