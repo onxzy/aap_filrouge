@@ -11,7 +11,7 @@ Le programme affichera :
 
 
 ## Fonctionnement
-1. Se placer dans le dossier "indexation" (exemple de chemin suivi : filrouge/app_filrouge/indexation)
+1. Se placer dans le dossier "indexation" (exemple de chemin suivi : `filrouge/app_filrouge/indexation`)
 2. Taper la commande "make"
 3. Lancer le programme avec une commande du type suivant :
 ```bash

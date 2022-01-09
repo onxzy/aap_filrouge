@@ -5,7 +5,7 @@ Ce programme permet de rechercher tous les anagrammes présents dans le dictionn
 Il affichera le nombre de mots du dictionnaire disposant d’anagrammes ainsi que ces mots et leurs anagrammes triés par nombre d'anagrammes décroissant.
 
 ## Fonctionnement
-1. Se placer dans le dossier "anagrammes" (exemple : filrouge/app_filrouge/anagrammes)
+1. Se placer dans le dossier "anagrammes" (exemple : `filrouge/app_filrouge/anagrammes`)
 2. Taper la commande "make"
 3. Lancer le programme avec une commande du type suivant :
 ```bash
