@@ -92,7 +92,6 @@ T_avl indexing(char* filepath) {
     char c;
     int i = 0;
     // Stats
-    int nb_found = 0;
     int nb_char = 0;
     while ( (c = fgetc(file)) != EOF) {
         nb_char++;

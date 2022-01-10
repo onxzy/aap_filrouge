@@ -214,9 +214,10 @@ T_list * searchWord(T_avl root, char * word, int *pDepth) {
 	T_avlNode *foundNode = searchHash(root, word, pDepth); // On cherche si le hash est dans l'AVL
 	
 	if (foundNode == NULL) return NULL; // si non on arrête là
-
-	if (searchList(foundNode->words, word)) return &(foundNode->words); // si oui on cherche dans la liste de mots de ce noeud
-
+	
+	// si oui on cherche dans la liste de mots de ce noeud
+	if (searchList(foundNode->words, word)) return &(foundNode->words); 
+	return NULL;
 }
 
 T_avlNode * searchHash(T_avl root, char *e, int* pDepth) {

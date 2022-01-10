@@ -32,11 +32,6 @@ static int min(int a, int b) {
 	else return b;
 }
 
-static int v_abs(int a) {
-	if (a >= 0) return a;
-	else return -a;
-}
-
 
 
 
