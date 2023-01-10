@@ -1,15 +1,6 @@
 # Fil Rouge AAP
 
-## Contributeurs
-
-- Thomas Descorsiers
-- Tanguy de Richecour
-- Mélina Dupuy
-- Céline Barbet
-
-## Lien vers Github
-
-https://github.com/onxzy/aap_filrouge
+Projet dans le cadre du cours AAP à Centrale Lille
 
 ## Description
 
